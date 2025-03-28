@@ -1,0 +1,822 @@
+---
+title: ""
+author: ""
+date: '`r Sys.Date()`'
+output: html_document
+---
+
+<center>
+
+![](LOGO.PNG){width="546"}
+
+<center>
+
+---
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{=html}
+<style type="text/css">
+  body{
+  font-family: times, serif;
+}
+</style>
+```
+
+<center>
+
+#### Prepared by: Kyle Gatt
+
+<center>
+
+```{r setup, include=FALSE}
+library(tufte)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(flextable)
+library(officer)
+library(stringr)
+library(fuzzyjoin)
+library(ggrepel)
+library(tidyr)
+library(tidyverse)
+library(zoo)
+library(scales)
+library(flextable)
+library(gghighlight)
+library(TSrepr)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+
+```
+
+```{r, include=FALSE, echo=F}
+
+# This script will replace the "Main" tab in the TR20XXworksheet.xlxs file for total run tracking and projections
+#Step 1: Udate the date for which you are running this report:
+
+Today<-as.Date("2024-08-02",format("%Y-%m-%d"))
+Yesterday<-Today-1
+
+#Step 2: Download UCI_Harvest from OceanAK and place in the "Harvest" folder
+#Step 3: Update Daily Inseason Escapement Data (Fish Creek, Kenai, Kasilof)
+#Step 4: Update Age estimates for Escapement and Commercial Catch in the Catch and Escapement Data folder:
+
+#O:\SHAREDAT\Research\UCI Research Core\Projects\Catch and Escapement\2024 Catch & Escapement\Data\TOTAL_RUN_AGE_TRACKING...
+
+#Step 5: Download Statweek 
+Stat.Week2024<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Total Run Tracking in R/Data/Stat.Week2024.csv"))%>%
+  mutate(Stat.Start=as.Date(Stat.Start,format="%m/%d/%Y"),Stat.Stop=as.Date(Stat.Stop,format="%m/%d/%Y"))
+
+
+#Check to ensure dates have not been changed following BOF cycle:
+## Years will need to be updated
+KA.GL.Stop<-"2024-06-25" # Kasilof Gillnet-Actual stop date is the 24th
+KA.DP.Start<-"2024-06-25" #kasilof Dipnet-Actual start date is the 25th
+KA.DP.Stop<-"2024-08-07" #Kasilof Dipnet- Actual stop date is the 7th
+
+KE.DP.Start<-"2024-07-09" #Kenai Dipnet- Actual start date is the 10th
+KE.DP.Stop<-"2024-08-01" #kenai Dipnet- Actual stop date is the 31st
+
+
+################################################################################
+# COMMERCIAL HARVEST
+#This data is obtained from OceanAK->My folders->Inseason Total Run-> UCI_Harvest. Code below is importing datasets that are saved in the "Harvest" folder.
+#However, you should not have to use this code as FDMS output should already have this data
+
+# State Drift (All statistical areas except for Federal EEZ, Kasilof Terminal Harvest Area, and Chinitna Bay)
+State.Drift<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Harvest/UCI_Harvest.csv"))%>%mutate(Date=as.Date(Catch.Date,format="%Y-%m-%d"))%>%
+  filter(Gear.Code==3)%>%filter(!Stat.Area.Name=="24426 - Kasilof Terminal Drift"&!Stat.Area.Name=="24511 - Chinitna Drift"&!Stat.Area.Name=="24464 - UCI EEZ")%>%
+  group_by(Date)%>%
+  summarize(Fishery.Project="Central District Drift - State Waters", Season.Total=sum(Count))
+
+#Federal EEZ Drift
+EEZ.Drift<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Harvest/UCI_Harvest.csv"))%>%mutate(Date=as.Date(Catch.Date,format="%Y-%m-%d"))%>%
+  filter(Gear.Code==3)%>%filter(Stat.Area.Name=="24464 - UCI EEZ")%>%
+  group_by(Date)%>%
+  summarize(Fishery.Project="UCI EEZ", Season.Total=sum(Count))
+
+# Kenai Section (24442,24441,24432)
+Kenai.Section<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Harvest/UCI_Harvest.csv"))%>%mutate(Date=as.Date(Catch.Date,format="%Y-%m-%d"))%>%
+  filter(Stat.Area.Name=="24432 - Kalifornsky North"|Stat.Area.Name=="24442 - Salamantof"|Stat.Area.Name=="24441 - Salamantof"|Stat.Area.Name=="24442 - East Forelands")%>%
+  group_by(Date)%>%
+  summarize(Fishery.Project="Kenai Section Set Net Fishery", Season.Total=sum(Count))
+
+# Kasilof Section (24431,24422,24421)
+Kasilof.Section<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Harvest/UCI_Harvest.csv"))%>%mutate(Date=as.Date(Catch.Date,format="%Y-%m-%d"))%>%
+  filter(Stat.Area.Name=="24421 - Ninilchik"|Stat.Area.Name=="24422 - Coho"|Stat.Area.Name=="24431 - Kalifornsky South")%>%
+  group_by(Date)%>%
+  summarize(Fishery.Project="Kasilof Section Set Net Fishery", Season.Total=sum(Count))
+
+# Western (24520,24530,24540,24550)
+Western<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Harvest/UCI_Harvest.csv"))%>%mutate(Date=as.Date(Catch.Date,format="%Y-%m-%d"))%>%
+  filter(Stat.Area.Name=="24530 - Tuxedni Bay"|Stat.Area.Name=="24520 - Silver Salmon"|Stat.Area.Name=="24540 - Polly Creek"|Stat.Area.Name=="24550 - Little Jack Slough"|
+         Stat.Area.Name=="24610 - Kalgin Island West Side"|Stat.Area.Name=="24620 - Kalgin Island East Side"| #Kalgin Island
+         Stat.Area.Name=="24555 - Big River"|Stat.Area.Name=="24560 - West Foreland"| #Kustatan
+        Stat.Area.Name=="24510 - Chinitna Set")%>% #Chinitna Set
+  group_by(Date)%>%
+  summarize(Fishery.Project="Western Subdistrict Set Net Fishery", Season.Total=sum(Count))
+
+# General Knik Arm (24710,24720,24730,24741,24742,24743)
+Knik<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Harvest/UCI_Harvest.csv"))%>%mutate(Date=as.Date(Catch.Date,format="%Y-%m-%d"))%>%
+  filter(Stat.Area.Name=="24710 - Trading Bay"|Stat.Area.Name=="24720 - Tyonek"|Stat.Area.Name=="24730 - Beluga"|Stat.Area.Name=="24741 - Susitna Flats"|Stat.Area.Name=="24742 - Point Mackenzie"|  Stat.Area.Name=="24743 - Fire Island")%>%
+  group_by(Date)%>%
+  summarize(Fishery.Project="Northern District Set Net Fishery - General Subdistrict", Season.Total=sum(Count))
+
+# Eastern (24770,24780,24790)
+Eastern<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Harvest/UCI_Harvest.csv"))%>%mutate(Date=as.Date(Catch.Date,format="%Y-%m-%d"))%>%
+  filter(Stat.Area.Name=="24770 - Point Possession"|Stat.Area.Name=="24780 - Birch Hill"|Stat.Area.Name=="24790 - #3 Bay")%>%
+  group_by(Date)%>%
+  summarize(Fishery.Project="Northern District Set Net Fishery - Eastern Subdistrict", Season.Total=sum(Count))
+
+#Kasilof Terminal (Includes drift and gillnet harvests; 24425,24426)
+Kasilof.Terminal<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Harvest/UCI_Harvest.csv"))%>%mutate(Date=as.Date(Catch.Date,format="%Y-%m-%d"))%>%
+  filter(Stat.Area.Name=="24425 - Kasilof Terminal Set"|Stat.Area.Name=="24426 - Kasilof Terminal Drift")%>%
+  group_by(Date)%>%
+  summarize(Fishery.Project="Kasilof Terminal", Season.Total=sum(Count))
+
+
+### Combine all
+Commercial.Harvest<-rbind(State.Drift, EEZ.Drift, Kenai.Section, Kasilof.Section, Western, Knik, Eastern, Kasilof.Terminal)%>%group_by(Fishery.Project)%>%
+  complete(Date = seq.Date(as.Date("2024-06-01",format="%Y-%m-%d"), Today, by="day"))%>%replace(is.na(.),0)
+#Generating Cumulative Harvests
+Commercial.Harvest.Cumu<-Commercial.Harvest%>%
+  group_by(Fishery.Project)%>%mutate(Season.Total=cumsum(Season.Total),Fate="Commercial Harvest")
+
+
+################################################################################
+## Escapement
+#Requires daily apportioned sockeye counts. Susitna runs are based on historical run timing and expanded by date of projection. 
+
+#Susitna Projection
+Forcast.Total.Run<-303400 #2024 forecast for Susitna stock sockeye
+Assumed.Harvest.Rate<-.42 #Mean Harvest rate 2007-2015
+Forecast.Escapement<-Forcast.Total.Run-(Forcast.Total.Run*Assumed.Harvest.Rate) #Multiple the harvest rate by projection to get projected escapement
+
+SU.ESC<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Escapement/Historical/Susitna_Run_Timing.csv"))%>%mutate(Date=as.Date(Date,format="%d-%b"))%>%
+  mutate(Daily.Count=Mean.Daily.Prop*Forecast.Escapement,Fishery.Project="Susitna Escapement")%>%select(Date,Daily.Count,Fishery.Project)%>%
+  filter(Date<=Yesterday)
+
+#Fish Creek- Obtain from Fish Counts page on ADFG webpage
+Fish.Creek<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Escapement/Fish_Creek.csv"))%>%mutate(Date=as.Date(Date,format="%d-%b"))%>%
+  mutate(Fishery.Project="Fish Creek Escapement")%>%filter(Date<=Yesterday)
+
+#Sonar Sites- Obtained from "Escapement" folder
+Kasilof.Sonar<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Escapement/Kasilof_Sonar.csv"))%>%mutate(Date=as.Date(Date,format="%d-%b"))%>%
+  mutate(Fishery.Project="Kasilof River Escapement")%>%filter(Date<=Yesterday)
+
+Kenai.Sonar<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Escapement/Kenai_Sonar.csv"))%>%mutate(Date=as.Date(Date,format="%d-%b"))%>%
+  mutate(Fishery.Project="Kenai River Escapement")%>%filter(Date<=Yesterday)
+
+#Crescent- Escapement estimated from harvest of the western district at a harvest rate of 0.463, which is based on GSI of harvest (2005-2021). 
+#Please note, this harvest is the historical stat areas of the western reporting group
+Crescent<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Harvest/UCI_Harvest.csv"))%>%mutate(Date=as.Date(Catch.Date,format="%Y-%m-%d"))%>%
+  filter(Stat.Area.Name=="24530 - Tuxedni Bay"|Stat.Area.Name=="24520 - Silver Salmon"|Stat.Area.Name=="24540 - Polly Creek"|Stat.Area.Name=="24550 - Little Jack Slough")%>%
+  group_by(Date)%>%
+  summarize(Season.Total=sum(Count))%>%
+  group_by(Date)%>%summarize(Daily.Count=(Season.Total/0.463)-Season.Total)%>%mutate(Fishery.Project="Crescent Escapement")
+
+
+Escapement<-rbind(SU.ESC,Fish.Creek,Kasilof.Sonar,Kenai.Sonar,Crescent)%>%group_by(Fishery.Project)%>%
+  complete(Date = seq.Date(as.Date("2024-06-01",format="%Y-%m-%d"), Today, by="day"))%>%replace(is.na(.),0)
+
+Escapement<-Escapement%>%rbind(Escapement%>%group_by(Date)%>%summarize(Daily.Count=sum(Daily.Count)*.15,Fishery.Project="Other"))# Adding in Unmonitored systems
+
+Escapement.Cumu<-Escapement%>%group_by(Fishery.Project)%>%mutate(Season.Total=cumsum(Daily.Count))%>%
+  select(Fishery.Project,Date,Season.Total)%>%
+  mutate(Fate="Escapement")
+
+
+################################################################################
+# SUBSISTENCE AND PERSONAL USE PROJECTIONS
+# This script is based on the "KENAI- Kasilof PU&SF projection" tab in the TR2023 file.
+
+#First we must estimate harvest rates for each fishery
+#Update Each Year
+Current.Year<-2024
+
+#Each season, the PU_Sport_HR file will need updated using Comm AMR Appendix A17 and Sport AMR T18 (Columns C and N)
+#Note: Kasilof sport harvest is available from the statewide harvest survey webpage
+#Also, historical sockeye counts will need updated as well.
+
+#Season Dates
+#Kasilof Gillnet-6/15 to 6/24
+#Kasilof Dipnet- 6/25 to 8/7
+#Kenai Dipnet- 7/10 to 7/31
+
+#Data Wrangling and Reformatting
+Hist.KeKa.Sonar<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Escapement/Historical/KEKA_Hist_Sonar.csv"))
+Hist.KeKa.Sonar$Date.Full<-as.Date(Hist.KeKa.Sonar$Date,format = "%d-%b")#create date that may be sorted chronologically
+
+#This file will require updating each season.
+PU_SPORT_HR<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Harvest/PU_SPORT_HR.csv"))
+
+
+#Estimate Mean Harvest for PU, Sub and Sport to apply to sonar counts 
+#First set season dates and get average passage during those dates
+KA.Gillnet<-Hist.KeKa.Sonar%>%filter(River=="Kasilof"&Date.Full>"2024-06-14"&Date.Full<"2024-06-25")%>%group_by(Year)%>%summarize(Kasilof.Sonar.Gillnet=sum(Daily.Count))
+KA.Dip<-Hist.KeKa.Sonar%>%filter(River=="Kasilof",Date.Full>"2024-06-25"&Date.Full<"2024-08-07")%>%group_by(Year)%>%summarize(Kasilof.Sonar.Dipnet=sum(Daily.Count))
+KA.Sport<-Hist.KeKa.Sonar%>%filter(River=="Kasilof")%>%group_by(Year)%>%summarize(Kasilof.Sonar=sum(Daily.Count))
+KE.Dip<-Hist.KeKa.Sonar%>%filter(River=="Kenai",Date.Full>"2024-07-10"&Date.Full<"2024-07-31")%>%group_by(Year)%>%summarize(Kenai.Sonar.Dipnet=sum(Daily.Count))
+KE.Sport<-Hist.KeKa.Sonar%>%filter(River=="Kenai")%>%group_by(Year)%>%summarize(Kenai.Sonar=sum(Daily.Count))
+
+#Now estimate harvest rate
+Inriver.Harvest<-PU_SPORT_HR%>%mutate(Kasilof.Harvest.Below=Kasilof.Gillnet+Kasilof.Dipnet+Kasilof.Sport.Below.Sonar,
+                                                            Kenai.Harvest.Below=Kenai.Dipnet+Kenai.Sport.Below.Sonar)%>%
+  left_join(KA.Gillnet)%>%left_join(KA.Dip)%>%left_join(KA.Sport)%>%left_join(KE.Dip)%>%left_join(KE.Sport)%>%
+  mutate(Kasilof.Gillnet.Harvestrate=Kasilof.Gillnet/(Kasilof.Gillnet+Kasilof.Sonar.Gillnet),
+         Kasilof.Dipnet.Harvestrate=Kasilof.Dipnet/(Kasilof.Dipnet+Kasilof.Sonar.Dipnet),
+         Kasilof.Sport.Harvestrate=Kasilof.Sport.Below.Sonar/(Kasilof.Sport.Below.Sonar+Kasilof.Sonar),
+         Kenai.Dipnet.Harvestrate=Kenai.Dipnet/(Kenai.Dipnet+Kenai.Sonar.Dipnet),
+         Kenai.Sport.Harvestrate=Kenai.Sport.Below.Sonar/(Kenai.Sport.Below.Sonar+Kenai.Sonar))%>%
+  select(1,17:21)%>%
+  filter(Year<Current.Year&Year>Current.Year-6)%>% #Take 5-year average
+  summarize(across(2:6,mean,na.rm=T))
+
+
+###
+# Kasilof 
+Kasilof.Gillnet<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Escapement/Kasilof_Sonar.csv"))%>%mutate(Date=as.Date(Date,format="%d-%b"))%>%
+  mutate(Harvest=ifelse(Date<KA.GL.Stop,(Daily.Count*Inriver.Harvest$Kasilof.Gillnet.Harvestrate)/(1-Inriver.Harvest$Kasilof.Gillnet.Harvestrate),0))%>%
+  filter(Date<=Yesterday)%>%
+  mutate(Fishery.Project="Kasilof Personal Use Gillnet")%>%
+  select(Date,Harvest,Fishery.Project)
+
+Kasilof.Dipnet<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Escapement/Kasilof_Sonar.csv"))%>%mutate(Date=as.Date(Date,format="%d-%b"))%>%
+  mutate(Harvest=ifelse(Date>=KA.DP.Start&Date<KA.DP.Stop,(Daily.Count*Inriver.Harvest$Kasilof.Dipnet.Harvestrate)/(1-Inriver.Harvest$Kasilof.Dipnet.Harvestrate),0))%>%
+  filter(Date<=Yesterday)%>%
+  mutate(Fishery.Project="Kasilof Personal Use Dipnet")%>%
+  select(Date,Harvest,Fishery.Project)
+
+Kasilof.Sport<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Escapement/Kasilof_Sonar.csv"))%>%mutate(Date=as.Date(Date,format="%d-%b"))%>%
+  mutate(Harvest=(Daily.Count*Inriver.Harvest$Kasilof.Sport.Harvestrate)/(1-Inriver.Harvest$Kasilof.Sport.Harvestrate))%>%
+  filter(Date<=Yesterday)%>%
+  mutate(Fishery.Project="Kasilof Sport")%>%
+  select(Date,Harvest,Fishery.Project)%>%
+  mutate(Harvest=Harvest*2) #Bag limit was doubled to 6 during the 2024 BOF Meeting
+
+# Kenai
+Kenai.Dipnet<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Escapement/Kenai_Sonar.csv"))%>%mutate(Date=as.Date(Date,format="%d-%b"))%>%
+  mutate(Harvest=ifelse(Date>KE.DP.Start&Date<KE.DP.Stop,(Daily.Count*Inriver.Harvest$Kenai.Dipnet.Harvestrate)/(1-Inriver.Harvest$Kenai.Dipnet.Harvestrate),0))%>%
+  filter(Date<=Yesterday)%>%
+  mutate(Fishery.Project="Kenai Personal Use Dipnet")%>%
+  select(Date,Harvest,Fishery.Project)
+
+Kenai.Sport<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Escapement/Kenai_Sonar.csv"))%>%mutate(Date=as.Date(Date,format="%d-%b"))%>%
+  mutate(Harvest=(Daily.Count*Inriver.Harvest$Kenai.Sport.Harvestrate)/(1-Inriver.Harvest$Kenai.Sport.Harvestrate))%>%
+  filter(Date<=Yesterday)%>%
+  mutate(Fishery.Project="Kenai Sport")%>%
+  select(Date,Harvest,Fishery.Project)%>%
+  mutate(Harvest=Harvest*2) #Bag limit was doubled to 6 during the 2024 BOF Meeting
+
+
+
+UCI.PU.SF<-rbind(Kasilof.Gillnet,Kasilof.Dipnet,Kasilof.Sport,Kenai.Dipnet,Kenai.Sport)%>%
+  group_by(Fishery.Project)%>%
+  complete(Date = seq.Date(as.Date("2024-06-01",format="%Y-%m-%d"), Today, by="day"))%>%replace(is.na(.),0)
+  
+  
+UCI.PU.SF.Cumu<-UCI.PU.SF%>%group_by(Fishery.Project)%>%mutate(Season.Total=cumsum(Harvest))%>%
+  select(Fishery.Project,Date,Season.Total)%>%
+  mutate(Fate="Personal Use and Sport")
+
+
+###############################################################################
+# OTF
+#NOT BEING RUN IN 2024
+
+#OTF<-read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Harvest/OTF_Harvest.csv"))%>%mutate(Date=as.Date(Date,format="%d-%b"))%>%
+#  mutate(Fate="Commercial Harvest", Fishery.Project="OTF", Season.Total=cumsum(Count))%>%select(1,3,4,5)
+
+################################################################################
+################################################################################  
+# Combine All Fates- Estimates from this will be used in the age allocation model for stock specific return estimates via the Age allocation model in "Age_Composition Script"
+
+Page1<-rbind(Commercial.Harvest.Cumu,Escapement.Cumu,UCI.PU.SF.Cumu)
+
+Inseason.Total.Run<-Page1%>%group_by(Date,Fate)%>%summarize(Total.Return=sum(Season.Total,na.rm = T))
+
+Total.Run.By.Date<-Inseason.Total.Run%>%group_by(Date)%>%summarize(Inseason.Total=as.integer(sum(Total.Return)))
+
+```
+
+```{r, inlcude=F,echo=F}
+
+#Assign the stat week for later trimming
+Stat.Today<-
+  (Stat.Week2024%>%rowwise()%>%do(data.frame(Stat.Week=.$Stat.Week,Date=seq(.$Stat.Start,.$Stat.Stop,by='1 day')))%>%filter(Date%in%Yesterday))$Stat.Week
+
+################################################################################
+#Historically, a UCI Age Composition Report was pulled from FDMS and put into the Age Compositions folder. In 2024, the aging team decided entered data in excel would be much more efficient.
+#For details and code for pre-generated UCI age comp report, see Age_Allocation_Inseason in the 2023 folder.
+# This season we will generate this report here.
+###############################################################################
+
+
+##Generating Age Comp Report For Commercial Harvest
+UCI.Commercial.Ages.0<-read.csv(file("O:/SHAREDAT/Research/UCI Research Core/Projects/Catch and Escapement/2024 Catch & Escapement/Data/TOTAL_RUN_AGE_TRACKING/COMMERCIAL_CATCH_AGES.csv"))%>%
+ select(Date.of.Fishery,Sampling.Group,Age)%>%filter(!Age%in%NA)%>% 
+  mutate(Date.of.Fishery=as.Date(Date.of.Fishery,format="%d-%b"))%>%
+  rename(Fishery.Project=Sampling.Group,Date=Date.of.Fishery)%>%
+                            fuzzy_left_join(Stat.Week2024,by=c("Date"="Stat.Start","Date"="Stat.Stop"),match_fun=list(`>=`,`<=`))%>%select(-c(Stat.Start,Stat.Stop))
+
+UCI.Commercial.Ages<-UCI.Commercial.Ages.0%>%group_by(Fishery.Project,Stat.Week,Age)%>%summarize(Count=n())%>%group_by(Fishery.Project,Stat.Week)%>%mutate(Samples=sum(Count))
+
+#Add Commercial Harvest Data by sampling period for later Weighting
+UCI.Commercial.Ages<-UCI.Commercial.Ages%>%
+  left_join(Commercial.Harvest%>%fuzzy_left_join(Stat.Week2024,by=c("Date"="Stat.Start","Date"="Stat.Stop"),match_fun=list(`>=`,`<=`))%>%select(-c(Stat.Start,Stat.Stop))%>%
+  group_by(Fishery.Project,Stat.Week)%>%summarize(Index=sum(Season.Total)))
+
+
+##Generating Age Comp Report For Escapements
+UCI.Escapement.Ages.0<-read.csv(file("O:/SHAREDAT/Research/UCI Research Core/Projects/Catch and Escapement/2024 Catch & Escapement/Data/TOTAL_RUN_AGE_TRACKING/ESCAPEMENT_AGES.csv"))%>%
+  select(Date.of.Fishery,Sampling.Group,Age)%>%filter(!Age%in%NA)%>% 
+  mutate(Date.of.Fishery=as.Date(Date.of.Fishery,format="%d-%b"))%>%
+  rename(Fishery.Project=Sampling.Group,Date=Date.of.Fishery)%>%
+  fuzzy_left_join(Stat.Week2024,by=c("Date"="Stat.Start","Date"="Stat.Stop"),match_fun=list(`>=`,`<=`))%>%select(-c(Stat.Start,Stat.Stop))
+  
+UCI.Escapement.Ages<-UCI.Escapement.Ages.0%>%group_by(Fishery.Project,Stat.Week,Age)%>%summarize(Count=n())%>%left_join(
+  UCI.Escapement.Ages.0%>%group_by(Fishery.Project,Stat.Week)%>%summarize(Samples=n()))
+
+#Add Escapement Data by sampling period for later Weighting
+UCI.Escapement.Ages<-UCI.Escapement.Ages%>%left_join(Escapement%>%
+                                                       fuzzy_left_join(Stat.Week2024,by=c("Date"="Stat.Start","Date"="Stat.Stop"),match_fun=list(`>=`,`<=`))%>%select(-c(Stat.Start,Stat.Stop))%>%
+                                                       group_by(Fishery.Project,Stat.Week)%>%summarize(Index=sum(Daily.Count)))
+
+##Combing Commercial and Escapement Age Comp Data
+Age.Comp<-rbind(UCI.Escapement.Ages, UCI.Commercial.Ages)%>%
+  mutate(Gear=ifelse(Fishery.Project=="Central District Drift - State Waters"|Fishery.Project=="UCI EEZ",3, #Assigning gear codes for later analysis
+                                                        ifelse(Fishery.Project=="Kenai River Escapement"|
+                                                                 Fishery.Project=="Kasilof River Escapement"|
+                                                                 Fishery.Project=="Fish Creek"|
+                                                                 Fishery.Project=="Judd Lake"|
+                                                                 Fishery.Project=="Larson Creek",14,4))) #Assigning Weir gear code)
+
+#Because we do not sample every stat week we must account for this in our cumulative index counts and only cumulatively count the escapement and harvests of sampled periods
+Cumu.Index<-Age.Comp%>%group_by(Fishery.Project,Stat.Week)%>%summarize(Index=unique(Index))%>%
+  group_by(Fishery.Project)%>%mutate(Index.Cumu=cumsum(Index))%>%select(Fishery.Project,Stat.Week,Index.Cumu)
+
+
+#Now add to age comp report
+Age.Comp<-Age.Comp%>%left_join(Cumu.Index)
+
+#Generating weighted Comps
+
+  A1<-Age.Comp%>%mutate(Count.Period=round((Count/Samples)*Index))%>% #Proportion an age class makes up -> number of individuals in that age class for that sampled period
+    group_by(Fishery.Project,Age)%>%mutate(Cumu.Count=cumsum(Count.Period))%>% #Cumulative count of individuals in that age class across sampled periods
+     ungroup()%>%#The proportion an age class makes up of the cumulative sampled periods (weighted age compositions)
+    complete(Fishery.Project,Stat.Week,Age)%>%arrange(Fishery.Project,Stat.Week,Age)%>%
+     group_by(Fishery.Project,Stat.Week)%>%fill(Index.Cumu,.direction = "updown")%>%arrange(Fishery.Project,Stat.Week,Age)%>%
+     group_by(Fishery.Project,Age)%>%
+     fill(Cumu.Count,.direction = "down")%>%
+     mutate(Weighted=round(Cumu.Count/Index.Cumu,digits = 3))%>%
+     select(Fishery.Project,Stat.Week,Age,Weighted)%>%ungroup()%>%
+    group_by(Fishery.Project,Stat.Week)%>%mutate(Weighted.Total=sum(Weighted,na.rm=T),Weighted.Corrected=ifelse(Weighted.Total>0&Weighted%in%NA,0,Weighted))
+ 
+ 
+ 
+    A2<-A1%>%group_by(Fishery.Project,Age)%>%
+    complete(Stat.Week = seq(22,Stat.Today, by=1))%>%arrange(Fishery.Project,Stat.Week,Age)%>%
+    group_by(Fishery.Project,Age)%>%
+    fill(Weighted.Corrected,.direction = "updown")%>% #fill forward age comps until we get updated age comps
+    ungroup()%>%select(-c(Weighted,Weighted.Total))%>%
+    left_join(Stat.Week2024)%>%
+    group_by(Fishery.Project,Stat.Week,Age,Weighted.Corrected)%>%
+    expand(Date=as.Date(Stat.Start:Stat.Stop),.name_repair = "unique")%>%ungroup()%>% #expand to weighted age comps to daily 
+    filter(Date<=Yesterday&Date>=as.Date("2024-06-01",format("%Y-%m-%d")))
+    
+
+Age.Comp.Weighted<-A2%>%rename(Weighted=Weighted.Corrected)%>%arrange(Fishery.Project,Date,Age)
+
+#Adding Cumulative Season Totals
+Age.Comp.Weighted<-Age.Comp.Weighted%>%group_by(Fishery.Project,Date)%>%mutate(Weighted.Diff=1-sum(Weighted),Count=sum(ifelse(Weighted>0,1,0)))%>%
+  mutate(Weighted=ifelse(Weighted>0,Weighted+(Weighted.Diff/3),Weighted))%>%select(Fishery.Project,Stat.Week,Age,Weighted,Date)%>%left_join(Page1%>%select(-Fate))%>%arrange(Fishery.Project,Date)
+
+
+###############################################################################
+# Harvest Age Compositions
+# The UCI age composition report pulls harvest data from Mariner. Thus, the "index" column is the number of fish harvested within each specific period. 
+# Each year, the periods will need to be updated in FDMS. 
+
+# Because we will not have the data inseason for most escapement projects and some will not operate, we will use alternatives. (see TR2023worksheet->Page 2)
+
+#ESCAPEMENT
+# Susitna = Larson-> Susitna Forecast 
+# Yentna = Judd-> Susitna Forecast
+# Fish Creek = Fish Creek Forecast
+# Crescent = Western Commercial Harvest
+# Other = Central District Drift Fishery
+
+# HARVEST
+# Kustatan = Western Commercial Harvest
+# Chinitna Bay = Central District Drift Fishery
+# Knik Arm = Fish Creek Forecast
+# Kasilof Terminal = 2015 Terminal Harvest Age Comp
+
+
+
+#Adding in alternative age comps but using harvests and escapements (see Page 2 of the TR2023worksheet)
+Alternatives<- rbind(
+  
+  #Adding Remaining Escapements
+    Escapement.Cumu%>%filter(Fishery.Project%in%c("Susitna Escapement","Fish Creek Escapement"))%>%select(-Fate)%>%
+    left_join(read.csv(file("O:/DCF/UCI/Research/MNGMT/Ins/24/Total Run Tracking in R/Data/Age.Comp.Forecasts.csv")),relationship = "many-to-many")%>%
+      fuzzy_left_join(Stat.Week2024,by=c("Date"="Stat.Start","Date"="Stat.Stop"),match_fun=list(`>=`,`<=`))%>%select(-c(Stat.Start,Stat.Stop))%>%filter(Date<Today),
+ 
+  Age.Comp.Weighted%>%filter(Fishery.Project%in%"Western Subdistrict Set Net Fishery")%>% #For Crescent 
+    transform(Fishery.Project=plyr::revalue(Fishery.Project,c("Western Subdistrict Set Net Fishery"="Crescent Escapement")))%>%select(-Season.Total)%>%
+    left_join(Escapement.Cumu%>%filter(Fishery.Project%in%"Crescent Escapement")%>%select(1:3)),
+
+  Age.Comp.Weighted%>%filter(Fishery.Project%in%"Central District Drift - State Waters")%>% #Unmonitored Systems
+    transform(Fishery.Project=plyr::revalue(Fishery.Project,c("Central District Drift - State Waters"="Other")))%>%select(-Season.Total)%>%
+    left_join(Escapement.Cumu%>%filter(Fishery.Project%in%"Other")%>%select(1:3)),
+  
+  #Kalgin and Kustatan Harvests and age comps are grouped in western District Harvest
+  
+  # PAGE 4:Adding Personal Use and Sportfish Harvest Projections
+  Age.Comp.Weighted%>%filter(Fishery.Project%in%"Kasilof River Escapement")%>% 
+    transform(Fishery.Project=plyr::revalue(Fishery.Project,c("Kasilof River Escapement"="Kasilof Personal Use Gillnet")))%>%select(-Season.Total)%>%
+    left_join(UCI.PU.SF.Cumu%>%filter(Fishery.Project%in%"Kasilof Personal Use Gillnet")%>%select(1:3)),
+  
+  Age.Comp.Weighted%>%filter(Fishery.Project%in%"Kasilof River Escapement")%>% 
+    transform(Fishery.Project=plyr::revalue(Fishery.Project,c("Kasilof River Escapement"="Kasilof Personal Use Dipnet")))%>%select(-Season.Total)%>%
+    left_join(UCI.PU.SF.Cumu%>%filter(Fishery.Project%in%"Kasilof Personal Use Dipnet")%>%select(1:3)),
+  
+  Age.Comp.Weighted%>%filter(Fishery.Project%in%"Kasilof River Escapement")%>%
+    transform(Fishery.Project=plyr::revalue(Fishery.Project,c("Kasilof River Escapement"="Kasilof Sport")))%>%select(-Season.Total)%>%
+    left_join(UCI.PU.SF.Cumu%>%filter(Fishery.Project%in%"Kasilof Sport")%>%select(1:3)),
+  
+  Age.Comp.Weighted%>%filter(Fishery.Project%in%"Kenai River Escapement")%>%
+    transform(Fishery.Project=plyr::revalue(Fishery.Project,c("Kenai River Escapement"="Kenai Personal Use Dipnet")))%>%select(-Season.Total)%>%
+   left_join(UCI.PU.SF.Cumu%>%filter(Fishery.Project%in%"Kenai Personal Use Dipnet")%>%select(1:3)),
+  
+  Age.Comp.Weighted%>%filter(Fishery.Project%in%"Kenai River Escapement")%>% 
+    transform(Fishery.Project=plyr::revalue(Fishery.Project,c("Kenai River Escapement"="Kenai Sport")))%>%select(-Season.Total)%>%
+    left_join(UCI.PU.SF.Cumu%>%filter(Fishery.Project%in%"Kenai Sport")%>%select(1:3)))
+
+
+
+
+#Combine alternative age comp data to Age.Comp.Weighted dataset
+Page2<- Age.Comp.Weighted%>%rbind(Alternatives)%>%mutate(Total.Fish=Season.Total*Weighted)%>%ungroup()
+
+
+#Page2%>%group_by(Fishery.Project,Date)%>%summarize(Weighted.Total=sum(Total.Fish),actual.total=unique(Season.Total))%>%mutate(Test=actual.total-Weighted.Total)%>%arrange(desc(Test))
+
+################################################################################ 
+############################################################################### 
+# AGE ALLOCATION MODELING
+# This section is based in the TRXXXworksheet.xlsx (Tab: Pages 6:12)
+
+# Page 6
+Adjusted.Age.Comp<-Page2%>%mutate(Stock=ifelse(Fishery.Project%in%c("Kasilof River Escapement", "Kasilof Personal Use Gillnet","Kasilof Personal Use Dipnet", "Kasilof Sport"),"Kasilof",
+                                               ifelse(Fishery.Project%in%c("Kenai River Escapement","Kenai Personal Use Dipnet","Kenai Sport"),"Kenai",
+                                                      ifelse(Fishery.Project%in%"Susitna Escapement","Susitna",ifelse(
+                                                        Fishery.Project%in%"Crescent Escapement","Crescent",
+                                                        ifelse(Fishery.Project%in%"Fish Creek Escapement","Fish Creek",
+                                                               ifelse(Fishery.Project%in%"Other","Other","NA")))))))%>%filter(!Stock%in%"NA")%>%
+  group_by(Stock,Age,Date)%>%summarize(Stock.Total=sum(Total.Fish))
+
+
+# Page 7-Area Adjustments
+#This section will be used to choose what stock should be attributed to which fishery. Area adjustments are updated with 2021-2023 GSI data
+
+#Adjusted percent of age classes for Susitna, Kenai, Kasilof, Fish Creek, and Other
+Adjusted.2<-Adjusted.Age.Comp%>%filter(!Stock%in%"Crescent")%>%group_by(Age,Date)%>%mutate(Adjusted.Percent=Stock.Total/sum(Stock.Total,na.rm=T))%>%replace(is.na(.), 0)
+#Adjusted percent of age classes for Kenai, and Kasilof
+Adjusted.3<-Adjusted.Age.Comp%>%filter(Stock%in%c("Kenai",'Kasilof'))%>%group_by(Age,Date)%>%mutate(Adjusted.Percent=Stock.Total/sum(Stock.Total,na.rm=T))%>%replace(is.na(.), 0)
+#Adjusted percent of age classes for Susitna, Fish Creek, and Other
+Adjusted.4<-Adjusted.Age.Comp%>%filter(Stock%in%c("Susitna",'Fish Creek',"Other"))%>%group_by(Age,Date)%>%mutate(Adjusted.Percent=Stock.Total/sum(Stock.Total,na.rm=T))%>%replace(is.na(.), 0)
+#Adjusted percent of age classes for Crescent
+Adjusted.5<-Adjusted.Age.Comp%>%filter(Stock%in%c("Crescent"))%>%group_by(Age,Date)%>%mutate(Adjusted.Percent=Stock.Total/sum(Stock.Total,na.rm=T))%>%replace(is.na(.), 0)
+#Adjusted percent of age classes for All (NEW in 2024)
+Adjusted.6<-Adjusted.Age.Comp%>%group_by(Age,Date)%>%mutate(Adjusted.Percent=Stock.Total/sum(Stock.Total,na.rm=T))%>%replace(is.na(.), 0)
+
+
+# Page 8 and 9- Applying area adjustment to commercial harvest
+#Allocation of Commercial Harvest
+Allocation.Commercial<-rbind(
+  #Drift State Waters- Primary stock harvests are all but crescent
+  Adjusted.2%>%left_join(Page2%>%filter(Fishery.Project%in%"Central District Drift - State Waters")%>%select(Date,Age,Total.Fish))%>%replace(is.na(.), 0)%>%
+    mutate(Total.Adjusted=Adjusted.Percent*Total.Fish)%>%mutate(Fishery.Project="Central District Drift - State Waters"),
+  
+  #UCI EEZ- All stocks are harvested in this fishery
+  Adjusted.6%>%left_join(Page2%>%filter(Fishery.Project%in%"UCI EEZ")%>%select(Date,Age,Total.Fish))%>%replace(is.na(.), 0)%>%
+    mutate(Total.Adjusted=Adjusted.Percent*Total.Fish)%>%mutate(Fishery.Project="UCI EEZ"),
+  
+  #Kenai Section
+  Adjusted.3%>%left_join(Page2%>%filter(Fishery.Project%in%"Kenai Section Set Net Fishery")%>%select(Date,Age,Total.Fish))%>%replace(is.na(.), 0)%>%
+    mutate(Total.Adjusted=Adjusted.Percent*Total.Fish)%>%mutate(Fishery.Project="Kenai Section Set Net Fishery"),
+  
+  #Kasilof Section
+  Adjusted.3%>%left_join(Page2%>%filter(Fishery.Project%in%"Kasilof Section Set Net Fishery")%>%select(Date,Age,Total.Fish))%>%replace(is.na(.), 0)%>%
+    mutate(Total.Adjusted=Adjusted.Percent*Total.Fish)%>%mutate(Fishery.Project="Kasilof Section Set Net Fishery"),
+  
+  #Western Set Net Fisheries- This district harvests all stocks but has a high degree of variability
+  Adjusted.6%>%left_join(Page2%>%filter(Fishery.Project%in%"Western Subdistrict Set Net Fishery")%>%select(Date,Age,Total.Fish))%>%replace(is.na(.), 0)%>%
+    mutate(Total.Adjusted=Adjusted.Percent*Total.Fish)%>%mutate(Fishery.Project="Western Subdistrict Set Net Fishery"),
+  
+  #Northern District-General 
+  Adjusted.4%>%left_join(Page2%>%filter(Fishery.Project%in%"Northern District set Net Fishery - General Subdistrict")%>%select(Date,Age,Total.Fish))%>%replace(is.na(.), 0)%>%
+    mutate(Total.Adjusted=Adjusted.Percent*Total.Fish)%>%mutate(Fishery.Project="Northern District set Net Fishery - General Subdistrict"),
+  
+  #Northern District-Eastern
+  Adjusted.4%>%left_join(Page2%>%filter(Fishery.Project%in%"Northern District set Net Fishery - Eastern Subdistrict")%>%select(Date,Age,Total.Fish))%>%replace(is.na(.), 0)%>%
+    mutate(Total.Adjusted=Adjusted.Percent*Total.Fish)%>%mutate(Fishery.Project="Northern District set Net Fishery - Eastern Subdistrict"),
+  
+  #Kasilof Terminal Drift
+   Adjusted.3%>%left_join(Page2%>%filter(Fishery.Project%in%"Kasilof Terminal")%>%select(Date,Age,Total.Fish))%>%replace(is.na(.), 0)%>%
+    mutate(Total.Adjusted=Adjusted.Percent*Total.Fish)%>%mutate(Fishery.Project="Kasilof Terminal"))
+
+
+
+# Pages 10 and 11
+#Page9<-Allocation.Commercial%>%group_by(Fishery.Project,Age,Date)%>%mutate(Fishery.Age.Total=sum(Total.Adjusted))%>%
+#  select(Age,Date,Total.Fish,Stock)
+#  left_join(Page2%>%select(Fishery.Project,Date,Age,Weighted,Total.Fish))%>%
+#  mutate(Remainder=Total.Fish-Fishery.Age.Total)
+
+#################################################################################
+## Aggregating data
+
+#Total Commercial 
+Total.Allocation.Commercial<-Allocation.Commercial%>%group_by(Stock,Age,Date)%>%summarize(UCI.Total=sum(Total.Adjusted))%>%mutate(Fate="Commercial Harvest")
+
+#Total Escapement
+Total.Allocation.Escapement<-Page2%>%filter(Fishery.Project%in%c("Kasilof River Escapement","Kenai River Escapement","Crescent Escapement","Fish Creek Escapement","Susitna Escapement","Other"))%>%
+  transform(Stock=plyr::revalue(Fishery.Project,c("Kasilof River Escapement"="Kasilof", "Kenai River Escapement"="Kenai", 
+                                                  "Crescent Escapement"="Crescent","Fish Creek Escapement"="Fish Creek","Susitna Escapement"="Susitna","Other"="Other")))%>%
+  select(Age,Date,Total.Fish,Stock)%>%rename(UCI.Total=Total.Fish)%>%mutate(Fate="Escapement")
+
+#Total PU & Sport
+Total.Allocation.PUSPORT<-Page2%>%filter(Fishery.Project%in%c("Kasilof Personal Use Gillnet","Kasilof Personal Use Dipnet","Kasilof Sport","Kenai Personal Use Dipnet","Kenai Sport"))%>%
+  transform(Stock=plyr::revalue(Fishery.Project,c("Kasilof Personal Use Gillnet"="Kasilof","Kasilof Personal Use Dipnet"="Kasilof","Kasilof Sport"="Kasilof","Kenai Personal Use Dipnet"="Kenai","Kenai Sport"="Kenai")))%>%
+  select(Age,Date,Total.Fish,Stock)%>%rename(UCI.Total=Total.Fish)%>%mutate(Fate="Personal Use and Sport")
+
+###Combining All Fates
+Total.Allocation.UCI<-rbind(Total.Allocation.Commercial,Total.Allocation.Escapement,Total.Allocation.PUSPORT)
+
+
+################################################################################
+# Page 12
+Inseason.Totals<-Total.Allocation.UCI%>%group_by(Date)%>%summarize(AccumRun1=sum(UCI.Total))%>%left_join(Total.Run.By.Date)
+
+
+
+```
+
+```{r, inlcude=F,echo=F}
+
+#################################################################################
+######## DATA WRANGLING AND GROOMING ############################################
+
+#Gathering inseason allocation results
+Allocation.24<-Total.Allocation.UCI%>%filter(Stock%in%c("Kasilof","Kenai"))%>%group_by(Stock,Date)%>%summarize(Total=sum(UCI.Total))%>%mutate(Year=2024)
+
+### PREPARING TIMING DAT
+#Generating Inriver Run Timing
+Inriver.Timing<-Hist.KeKa.Sonar%>%select(River,Year,Date,Daily.Count)%>%filter(Year>=2000)%>%
+  group_by(River,Year)%>%mutate(Timing=cumsum(Daily.Count)/max(cumsum(Daily.Count)),Date=as.Date(Date,format="%d-%b"))%>%select(-Daily.Count)%>%
+  group_by(River)%>%
+  complete(Year,Date)%>%
+  group_by(River,Year)%>%
+  fill(Timing,.direction = "updown")%>%rename(Stock=River)
+
+
+```
+
+::: {align="left"}
+### Total Run Projections
+:::
+
+::: {align="left"}
+An inseason tier-status assessment is annually performed for late-run stock Kenai River sockeye salmon (See Table 4). Historically, the tier status assessment had relied on cumulative catch-per-unit-effort timing curves from the offshore test fish project (OTF) to project the total run to the Kenai River. This method provided unbiased estimates of run timing because performance of this fishery is largely independent of management actions. In 2024, the OTF project was cut due to budget issues which required other methods to be explored for the inseason projection. Inriver run timing curves were assessed using historical total run data and were found to provide reliable total run projection estimates within the scope of run tier designations.
+
+Stock-specific inriver run timing models spanning years 2000 to 2023 were evaluated to project the total run of sockeye salmon to the Kenai and Kasilof Rivers. Projection model performance was assessed using the mean arctangent absolute percent error (MAAPE) between the projected daily total run estimates and actual runs up to the date the projection was run. The top three models with the lowest MAAPE were selected for each stock and a weighted hybrid model approach was applied. Model weighted were assigned based on the running MAAPE of each selected model, with a lower MAAPE receiving a greater weight towards the final projection estimate.
+:::
+
+::: {style="margin-bottom:15px;"}
+:::
+
+```{r,include=F,echo=F}
+Test.1<-Inriver.Timing%>%left_join(
+  Inriver.Timing%>%left_join(Allocation.24%>%select(Stock,Date,Total))%>%mutate(Projection=Total/Timing)%>%filter(Date%in%Yesterday)%>%ungroup()%>%select(Stock,Year,Projection))%>%
+  mutate(Daily=Timing*Projection)%>%left_join(Allocation.24%>%select(Stock,Date,Total))
+
+
+Test.2<-Test.1%>%filter(Total>0)%>%group_by(Stock,Year)%>%summarize(MAAPE=mean(maape(Total,Daily)))%>%group_by(Stock)%>%
+    slice_min(order_by=MAAPE,n=3)%>%mutate(Year_Select=Year)%>%select(Stock,Year_Select)
+
+```
+
+::: {align="left"}
+**Table 1.-** Management tiers for the late-run stock Kenai River sockeye salmon.
+:::
+
+::: {align="left"}
+```{r,echo=F}
+data.frame(Tier=c("Lower","Middle","Upper"),Total.Run=c("Less than 2,300,000","2,300,000 to 4,600,000","Greater than 4,600,000"))%>%
+  flextable()%>%
+  set_header_labels(Total.Run="Total Run Size")%>%
+  font(fontname="serif",part="all")%>%
+  autofit()
+  
+
+
+```
+:::
+
+::: {align="left"}
+**Table 2.-** Total run projections by stock.
+:::
+
+```{r,echo=F}
+Test.1%>%filter(Total>0)%>%group_by(Stock,Year)%>%summarize(MAAPE=mean(maape(Total,Daily)))%>%group_by(Stock)%>%
+    slice_min(order_by=MAAPE,n=3)%>%left_join(Test.1%>%filter(Date%in%Yesterday)%>%select(Stock,Year,Projection))%>%
+  mutate(Inv.Weight=1/MAAPE)%>%group_by(Stock)%>%
+ mutate(Weight=Inv.Weight/sum(Inv.Weight),Weighted.Projection=Projection*Weight,Total=sum(Weighted.Projection))%>%mutate(Year=as.character(Year))%>%select(-Inv.Weight)%>%
+  left_join(Inriver.Timing%>%filter(Date%in%Yesterday)%>%select(Stock,Year,Timing)%>%mutate(Year=as.character(Year)))%>%
+  select(Stock,Year,Timing,MAAPE,Projection,Weight,Weighted.Projection,Total)%>%
+  flextable()%>%
+  merge_v(j=c(1,8))%>%
+  align(align="left",j=1:2,part="all")%>%
+  valign(valign = "top")%>%
+  line_spacing(space=1,part = "all")%>%
+  colformat_double(j=c(3,4,6),digits=2)%>%
+  mk_par(j = 3, part = "body",value = as_paragraph(as_chunk(Timing, formatter = fmt_pct)))%>%
+  font(fontname="serif",part="all")%>%
+  hline(i=3,j=1:8,part="body")%>%
+  bold(j=8)%>%
+  set_header_labels(Projection="Model projection",Weight="Model weight",Weighted.Projection="Weighted projection")%>%
+  fix_border_issues()%>%
+  autofit()
+
+```
+
+::: {style="margin-bottom:20px;"}
+:::
+
+```{r,echo=F}
+Test.1%>%left_join(Test.2)%>%mutate(Projection=round(Projection,digits=0))%>%
+  mutate(Upper=ifelse(Stock%in%"Kenai",4600000,NA),Lower=ifelse(Stock%in%"Kenai",2300000,NA))%>%
+  ggplot()+
+  geom_rect(aes(ymin=Lower, ymax=Upper, xmin=as.Date("2024-06-14",format="%Y-%m-%d"), xmax=as.Date("2024-09-01",format="%Y-%m-%d")), fill="yellow",color="yellow",alpha=.003)+
+  geom_line(aes(Date,Daily,group=Year))+
+  facet_grid(Stock~.,scales="free")+
+  gghighlight(Year==Year_Select ,calculate_per_facet = TRUE, use_direct_label = FALSE,
+              unhighlighted_params = list(linewidth = 1, colour = alpha("grey", 0.7)))+
+  
+  geom_line(aes(Date,Total),size=1.25,color=2)+
+  scale_y_continuous(labels = comma)+
+  ylab("Total Run")+
+  xlab("")+
+  theme_bw()+
+  theme(text=element_text(size=12,  family="serif"))
+
+
+```
+
+::: {align="left"}
+**Figure 1.-** The top three competing models for each stock (black lines) relative to actual daily cumulative total runs (red line). All other competing models are indicated in grey. The middle management tier (2.3 to 4.6 million fish) for late-run stock Kenai River sockeye salmon is indicated in yellow.
+:::
+
+::: {style="margin-bottom:20px;"}
+:::
+
+```{r,echo=F}
+  Projected.Daily<- Inriver.Timing%>%left_join(Allocation.24%>%select(Stock,Date,Total))%>%mutate(Projection=Total/Timing)%>%filter(Date<=Yesterday)%>%mutate(Projection.Date=Date)%>%
+    select(Stock,Year,Projection.Date,Projection)%>%
+    left_join(Inriver.Timing,relationship = "many-to-many")%>% #Adding yaer based run timing
+    mutate(Projected.Daily=Timing*Projection)%>%
+    left_join(Allocation.24%>%select(-Year),by=c("Stock","Date"))%>%
+    filter(!Total%in%NA)%>%
+    group_by(Stock,Year,Projection.Date)%>%summarize(MAAPE=mean(maape(Total,Projected.Daily)))%>%arrange(Stock,Projection.Date,MAAPE)%>%
+    group_by(Stock,Projection.Date)%>%slice(1:3)%>%
+left_join(Inriver.Timing%>%left_join(Allocation.24%>%select(Stock,Date,Total))%>%mutate(Projection=Total/Timing)%>%filter(Date<=Yesterday)%>%
+mutate(Projection.Date=Date)%>%select(Stock,Year,Projection.Date,Projection))%>%
+    mutate(Inv.Weight=1/MAAPE)%>%group_by(Stock,Projection.Date)%>%
+    mutate(Weighted.Projection=sum(((Inv.Weight/sum(Inv.Weight))*Projection)))
+    
+
+   Projected.Daily%>%
+      ggplot()+
+      geom_point(aes(Projection.Date,Projection),alpha=.2)+
+      geom_point(aes(Projection.Date,Weighted.Projection),size=4)+
+      facet_grid(Stock~.,scales="free")+
+      scale_y_continuous(labels = comma)+
+      ylab("Projected Total Run")+
+      xlab("")+
+      theme_bw()+
+      theme(text=element_text(size=12,  family="serif"))
+
+```
+
+::: {align="left"}
+**Figure 2.-** Weighted total run estimates (black dots) using the top three selected run timing models by projection date and stock. Grey dots represent individual total run projections for each selected model by date.
+:::
+
+::: {align="left"}
+### Age Allocation Modeling
+:::
+
+::: {align="left"}
+A weighted age composition method was used to estimate the contributions of Kenai, Kasilof, Susitna, and Crescent rivers, Fish Creek, and“Other” sockeye salmon stocks to commercial fishery harvests in UCI (see Bernard 1983 and Tobias and Tarbox 1999 for general methods). The method is based on the assumption that specific fisheries exploit each stock equally. The relative contribution of a specific age class in the escapement represents the relative contribution of that age class in the commercial harvest in a specific time and area fished. Sockeye salmon harvests in the various fishery subdistricts were allocated to the stocks entering major rivers that were in closest proximity to the fishery.
+:::
+
+::: {style="margin-bottom:15px;"}
+:::
+
+::: {align="left"}
+**Table 3.-** Cumulative total run estimates to date for primary Upper Cook Inlet sockeye salmon stocks.
+:::
+
+```{r,echo=F}
+
+Total.Allocation.UCI%>%group_by(Stock,Fate)%>%filter(Date%in%Yesterday)%>%summarize(Total=sum(UCI.Total))%>%
+  rbind(Total.Allocation.UCI%>%group_by(Stock)%>%filter(Date%in%Yesterday)%>%summarize(Total=sum(UCI.Total),Fate="Subtotal"))%>%arrange(Stock)%>%
+ flextable()%>%
+  merge_v(j=1:2)%>%
+   align(align="left",j=1:2,part="all")%>%
+  valign(valign = "top")%>%
+  line_spacing(space=1,part = "all")%>%
+  bg(i= ~Fate%in%"Subtotal",bg="grey95")%>%
+  colformat_double(j=3,digits=0)%>%
+   font(fontname="serif",part="all")%>%
+   set_header_labels(Fate="Run component")%>%
+  hline(i=c(3,6,10,14,17),j=1:3,part="body")%>%
+   fix_border_issues()%>%
+  autofit()
+
+
+```
+
+::: {style="margin-bottom:30px;"}
+:::
+
+::: {align="left"}
+**Table 4.-** Age composition of returns to the Kenai and Kasilof Rivers in 2024 relative to preseason forecasts.
+:::
+
+```{r,echo=F}
+Total.Allocation.UCI%>%filter(Stock%in%c("Kenai","Kasilof")&Date%in%Yesterday)%>%group_by(Stock,Age)%>%summarize(Total=sum(UCI.Total))%>%group_by(Stock)%>%mutate(Proportion=Total/sum(Total))%>%mutate(Proportion=round(Proportion,digits=2))%>%
+  mutate(Forecast=ifelse(Stock%in%"Kenai"&Age==1.2,515248,
+                         ifelse(Stock%in%"Kenai"&Age==1.3,2143928,
+                                ifelse(Stock%in%"Kenai"&Age==2.2,248800,
+                                       ifelse(Stock%in%"Kenai"&Age==2.3,472484,
+                                              ifelse(Stock%in%"Kasilof"&Age==1.2,506000,
+                                                     ifelse(Stock%in%"Kasilof"&Age==1.3,332218,
+                                                            ifelse(Stock%in%"Kasilof"&Age==2.2,221924,
+                                                                   ifelse(Stock%in%"Kasilof"&Age==2.3,55019,0)))))))))%>%mutate(Remaining=Forecast-Total,Percent.Returned=1-round(Total/Forecast,digits=2))%>%
+  mutate(Remaining=ifelse(Remaining<0,0,Remaining))%>%
+  select(Stock,Age,Proportion,Total,Forecast,Percent.Returned,Remaining)%>%replace(is.na(.), 0)%>%
+flextable()%>%
+  merge_v(j=1)%>%
+   align(align="left",j=1:2,part="all")%>%
+  valign(valign = "top")%>%
+  line_spacing(space=1,part = "all")%>%
+  mk_par(j = c(3,6), part = "body",value = as_paragraph(as_chunk(c(Proportion,Percent.Returned), formatter = fmt_pct)))%>%
+  colformat_double(j=c(4,7),digits=0)%>%
+   font(fontname="serif",part="all")%>%
+  hline(i=9,j=1:7,part="body")%>%
+set_header_labels(Age="Age class",Proportion="Composition of return",Total="Run to date",Forecast="Forecasted run",Remaining="Total fish remaining", Percent.Returned="Percent remaining")%>%
+   fix_border_issues()%>%
+  autofit()
+
+```
+
+::: {style="margin-bottom:10px;"}
+:::
+
+::: {align="left"}
+### Inseason Total Run Tracking
+:::
+
+::: {align="left"}
+**Table 5.-** Cumulative harvest and passage estimates of sockeye salmon in Upper Cook Inlet (UCI), 2024. All personal use and sport harvest estimates are projections based on recent five-year average harvest rates within each fishery. The Susitna River escapement estimate uses the average harvest rate of this stock in UCI commercial salmon fisheries (42%; 2007 to 2015), the average run timing, and pre-season forecasts. The Crescent River escapement estimate is based on the average commercial sockeye salmon harvest in the western district and average harvest rate of this stock (46.3%) from 2006 to 2021.
+:::
+
+```{r, echo=F}
+
+Page1%>%filter(Date%in%Yesterday)%>%select(-c(Date))%>%select(Fate,Fishery.Project,Season.Total)%>%
+  rbind(Page1%>%filter(Date%in%Yesterday)%>%select(-c(Date))%>%select(Fate,Fishery.Project,Season.Total)%>%
+  group_by(Fate)%>%summarize(Season.Total=sum(Season.Total))%>%mutate(Fishery.Project="Subtotal"))%>%
+  arrange(Fate)%>%
+  flextable()%>%
+  merge_v(j=1)%>%
+   align(align="left",j=1,part="all")%>%
+  valign(valign = "top")%>%
+  line_spacing(space=1,part = "all")%>%
+  add_body( Fate="Grand Total",
+            Season.Total=(Page1%>%filter(Date%in%Yesterday)%>%ungroup()%>%summarize(Count=sum(Season.Total)))[[1,1]],top=F)%>%
+  bg(i= ~Fishery.Project%in%"Subtotal",bg="grey95")%>%
+  set_header_labels(Fate="Run component",Fishery.Project="Fishery",Season.Total="Cumulative season total")%>%
+  colformat_double(j=3,digits=0)%>%
+   font(fontname="serif",part="all")%>%
+   fix_border_issues()%>%
+  autofit()
+
+```
+
+::: {style="margin-bottom:30px;"}
+:::

@@ -1,0 +1,448 @@
+﻿Stock,Date,Total,Year,Method
+Kenai,7/22/2024,721942,2018,AgeAllocation
+Kasilof,7/22/2024,525930,2018,AgeAllocation
+Kenai,7/24/2024,1285774,2017,AgeAllocation
+Kasilof,7/24/2024,664355,2017,AgeAllocation
+Kenai,6/15/2024,213.57,2016,GeneticReconstruction
+Kasilof,6/15/2024,11046.79803,2015,GeneticReconstruction
+Kenai,6/15/2024,22527.88067,2015,GeneticReconstruction
+Kenai,6/16/2024,213.57,2016,GeneticReconstruction
+Kasilof,6/16/2024,19581.28079,2015,GeneticReconstruction
+Kenai,6/16/2024,37089.67175,2015,GeneticReconstruction
+Kenai,6/17/2024,316.575,2016,GeneticReconstruction
+Kasilof,6/17/2024,28086.2069,2015,GeneticReconstruction
+Kenai,6/17/2024,45152.96289,2015,GeneticReconstruction
+Kenai,6/18/2024,316.575,2016,GeneticReconstruction
+Kasilof,6/18/2024,36805.41872,2015,GeneticReconstruction
+Kenai,6/18/2024,57030.96916,2015,GeneticReconstruction
+Kenai,6/19/2024,316.575,2016,GeneticReconstruction
+Kasilof,6/19/2024,50752.46305,2015,GeneticReconstruction
+Kenai,6/19/2024,66094.2603,2015,GeneticReconstruction
+Kenai,6/20/2024,1152.457,2016,GeneticReconstruction
+Kasilof,6/20/2024,69676.10837,2015,GeneticReconstruction
+Kenai,6/20/2024,90718.9517,2015,GeneticReconstruction
+Kenai,6/21/2024,1152.457,2016,GeneticReconstruction
+Kasilof,6/21/2024,89323.89163,2015,GeneticReconstruction
+Kenai,6/21/2024,104936.0493,2015,GeneticReconstruction
+Kenai,6/22/2024,1412.017,2016,GeneticReconstruction
+Kasilof,6/22/2024,121329.8278,2015,GeneticReconstruction
+Kenai,6/22/2024,119123.6554,2015,GeneticReconstruction
+Kenai,6/23/2024,3729.647,2016,GeneticReconstruction
+Kasilof,6/23/2024,129701.7489,2015,GeneticReconstruction
+Kenai,6/23/2024,166574.2359,2015,GeneticReconstruction
+Kenai,6/24/2024,3919.592,2016,GeneticReconstruction
+Kasilof,6/24/2024,162114.4995,2015,GeneticReconstruction
+Kenai,6/24/2024,190120.8181,2015,GeneticReconstruction
+Kenai,6/25/2024,5109.574,2016,GeneticReconstruction
+Kasilof,6/25/2024,180368.883,2015,GeneticReconstruction
+Kenai,6/25/2024,233862.7557,2015,GeneticReconstruction
+Kenai,6/26/2024,5109.574,2016,GeneticReconstruction
+Kasilof,6/26/2024,186854.1205,2015,GeneticReconstruction
+Kenai,6/26/2024,252493.7798,2015,GeneticReconstruction
+Kenai,6/27/2024,9420.135,2016,GeneticReconstruction
+Kasilof,6/27/2024,221902.7478,2015,GeneticReconstruction
+Kenai,6/27/2024,331083.3878,2015,GeneticReconstruction
+Kenai,6/28/2024,9420.135,2016,GeneticReconstruction
+Kasilof,6/28/2024,227378.9994,2015,GeneticReconstruction
+Kenai,6/28/2024,401182.3463,2015,GeneticReconstruction
+Kenai,6/29/2024,10732.3525,2016,GeneticReconstruction
+Kasilof,6/29/2024,270367.3713,2015,GeneticReconstruction
+Kenai,6/29/2024,430758.0374,2015,GeneticReconstruction
+Kenai,6/30/2024,17284.937,2016,GeneticReconstruction
+Kasilof,6/30/2024,297732.2153,2015,GeneticReconstruction
+Kenai,6/30/2024,499067.5883,2015,GeneticReconstruction
+Kenai,7/1/2024,29660.46443,2016,GeneticReconstruction
+Kasilof,7/1/2024,304433.1139,2015,GeneticReconstruction
+Kenai,7/1/2024,526109.8851,2015,GeneticReconstruction
+Kenai,7/2/2024,45382.38243,2016,GeneticReconstruction
+Kasilof,7/2/2024,349812.7331,2015,GeneticReconstruction
+Kenai,7/2/2024,588851.4892,2015,GeneticReconstruction
+Kenai,7/3/2024,58059.59762,2016,GeneticReconstruction
+Kasilof,7/3/2024,355104.1323,2015,GeneticReconstruction
+Kenai,7/3/2024,674364.2878,2015,GeneticReconstruction
+Kasilof,7/4/2024,7273.888202,2016,GeneticReconstruction
+Kenai,7/4/2024,114132.2502,2016,GeneticReconstruction
+Kasilof,7/4/2024,388188.9222,2015,GeneticReconstruction
+Kenai,7/4/2024,879203.268,2015,GeneticReconstruction
+Kasilof,7/5/2024,12415.30234,2016,GeneticReconstruction
+Kenai,7/5/2024,151739.8451,2016,GeneticReconstruction
+Kasilof,7/5/2024,394882.1186,2015,GeneticReconstruction
+Kenai,7/5/2024,938616.8757,2015,GeneticReconstruction
+Kenai,7/5/2024,0,2019,AgeAllocation
+Kasilof,7/5/2024,170188,2019,AgeAllocation
+Kasilof,7/6/2024,21197.43909,2016,GeneticReconstruction
+Kenai,7/6/2024,188741.8485,2016,GeneticReconstruction
+Kasilof,7/6/2024,438284.1364,2015,GeneticReconstruction
+Kenai,7/6/2024,990071.6457,2015,GeneticReconstruction
+Kasilof,7/7/2024,28823.70172,2016,GeneticReconstruction
+Kenai,7/7/2024,238569.4862,2016,GeneticReconstruction
+Kasilof,7/7/2024,456026.209,2015,GeneticReconstruction
+Kenai,7/7/2024,1239568.522,2015,GeneticReconstruction
+Kasilof,7/7/2024,336398,2020,Age Allocation
+Kenai,7/7/2024,55829,2020,Age Allocation
+Kasilof,7/8/2024,33611.58051,2016,GeneticReconstruction
+Kenai,7/8/2024,259085.309,2016,GeneticReconstruction
+Kasilof,7/8/2024,479264.9396,2015,GeneticReconstruction
+Kenai,7/8/2024,1326420.545,2015,GeneticReconstruction
+Kenai,7/8/2024,0,2019,AgeAllocation
+Kasilof,7/8/2024,186979,2019,AgeAllocation
+Kasilof,7/9/2024,40774.52257,2016,GeneticReconstruction
+Kenai,7/9/2024,319818.3644,2016,GeneticReconstruction
+Kasilof,7/9/2024,520476.0466,2015,GeneticReconstruction
+Kenai,7/9/2024,1542002.829,2015,GeneticReconstruction
+Kenai,7/9/2024,179855,2019,AgeAllocation
+Kasilof,7/9/2024,274688,2019,AgeAllocation
+Kasilof,7/10/2024,51451.29025,2016,GeneticReconstruction
+Kenai,7/10/2024,366535.2319,2016,GeneticReconstruction
+Kasilof,7/10/2024,535865.2916,2015,GeneticReconstruction
+Kenai,7/10/2024,1751407.056,2015,GeneticReconstruction
+Kasilof,7/10/2024,381542,2020,Age Allocation
+Kenai,7/10/2024,126060,2020,Age Allocation
+Kasilof,7/11/2024,68255.80596,2016,GeneticReconstruction
+Kenai,7/11/2024,561057.6814,2016,GeneticReconstruction
+Kasilof,7/11/2024,568153.2466,2015,GeneticReconstruction
+Kenai,7/11/2024,1912122.914,2015,GeneticReconstruction
+Kenai,7/11/2024,182078,2019,AgeAllocation
+Kasilof,7/11/2024,253223,2019,AgeAllocation
+Kasilof,7/11/2024,394678,2020,Age Allocation
+Kenai,7/11/2024,159564,2020,Age Allocation
+Kasilof,7/12/2024,96053.47893,2016,GeneticReconstruction
+Kenai,7/12/2024,627735.3922,2016,GeneticReconstruction
+Kasilof,7/12/2024,576062.1042,2015,GeneticReconstruction
+Kenai,7/12/2024,2023982.355,2015,GeneticReconstruction
+Kenai,7/12/2024,300425,2019,AgeAllocation
+Kasilof,7/12/2024,320497,2019,AgeAllocation
+Kasilof,7/12/2024,402869,2020,Age Allocation
+Kenai,7/12/2024,187957,2020,Age Allocation
+Kasilof,7/12/2024,462291,2022,Age Allocation
+Kenai,7/12/2024,261786,2022,Age Allocation
+Kasilof,7/13/2024,101683.0535,2016,GeneticReconstruction
+Kenai,7/13/2024,764946.4664,2016,GeneticReconstruction
+Kasilof,7/13/2024,621324.8076,2015,GeneticReconstruction
+Kenai,7/13/2024,2154101.416,2015,GeneticReconstruction
+Kasilof,7/13/2024,409281,2020,Age Allocation
+Kenai,7/13/2024,253746,2020,Age Allocation
+Kasilof,7/13/2024,489344,2022,Age Allocation
+Kenai,7/13/2024,307346,2022,Age Allocation
+Kasilof,7/14/2024,116761.8709,2016,GeneticReconstruction
+Kenai,7/14/2024,925707.2976,2016,GeneticReconstruction
+Kasilof,7/14/2024,656829.7215,2015,GeneticReconstruction
+Kenai,7/14/2024,2270934.078,2015,GeneticReconstruction
+Kenai,7/14/2024,333576,2019,AgeAllocation
+Kasilof,7/14/2024,330320,2019,AgeAllocation
+Kasilof,7/14/2024,451821,2020,Age Allocation
+Kenai,7/14/2024,289075,2020,Age Allocation
+Kasilof,7/14/2024,472341,2021,Age Allocation
+Kenai,7/14/2024,300526,2021,Age Allocation
+Kasilof,7/14/2024,558781,2022,Age Allocation
+Kenai,7/14/2024,374972,2022,Age Allocation
+Kasilof,7/15/2024,119619.3805,2016,GeneticReconstruction
+Kenai,7/15/2024,1082557.451,2016,GeneticReconstruction
+Kasilof,7/15/2024,683539.036,2015,GeneticReconstruction
+Kenai,7/15/2024,2331551.113,2015,GeneticReconstruction
+Kasilof,7/15/2024,486297,2021,Age Allocation
+Kenai,7/15/2024,328174,2021,Age Allocation
+Kasilof,7/16/2024,143173.336,2016,GeneticReconstruction
+Kenai,7/16/2024,1230115.196,2016,GeneticReconstruction
+Kasilof,7/16/2024,723165.7638,2015,GeneticReconstruction
+Kenai,7/16/2024,2450649.97,2015,GeneticReconstruction
+Kenai,7/16/2024,513138,2019,AgeAllocation
+Kasilof,7/16/2024,359201,2019,AgeAllocation
+Kasilof,7/16/2024,475192,2020,Age Allocation
+Kenai,7/16/2024,427531,2020,Age Allocation
+Kasilof,7/16/2024,572598,2021,Age Allocation
+Kenai,7/16/2024,364676,2021,Age Allocation
+Kasilof,7/17/2024,148587.9701,2016,GeneticReconstruction
+Kenai,7/17/2024,1330520.284,2016,GeneticReconstruction
+Kasilof,7/17/2024,749555.6455,2015,GeneticReconstruction
+Kenai,7/17/2024,2511711.018,2015,GeneticReconstruction
+Kenai,7/17/2024,780814,2017,AgeAllocation
+Kasilof,7/17/2024,692154,2017,AgeAllocation
+Kenai,7/17/2024,360118,2018,AgeAllocation
+Kasilof,7/17/2024,433704,2018,AgeAllocation
+Kenai,7/17/2024,539227,2019,AgeAllocation
+Kasilof,7/17/2024,362821,2019,AgeAllocation
+Kasilof,7/17/2024,501426,2020,Age Allocation
+Kenai,7/17/2024,482022,2020,Age Allocation
+Kasilof,7/17/2024,688561,2022,Age Allocation
+Kenai,7/17/2024,550173,2022,Age Allocation
+Kasilof,7/18/2024,165947.0629,2016,GeneticReconstruction
+Kenai,7/18/2024,1561485.525,2016,GeneticReconstruction
+Kasilof,7/18/2024,797338.2545,2015,GeneticReconstruction
+Kenai,7/18/2024,2611459.693,2015,GeneticReconstruction
+Kenai,7/18/2024,649892,2019,AgeAllocation
+Kasilof,7/18/2024,379895,2019,AgeAllocation
+Kasilof,7/19/2024,190141.8712,2016,GeneticReconstruction
+Kenai,7/19/2024,1660205.993,2016,GeneticReconstruction
+Kasilof,7/19/2024,827539.0455,2015,GeneticReconstruction
+Kenai,7/19/2024,2634400.621,2015,GeneticReconstruction
+Kenai,7/19/2024,477106,2018,AgeAllocation
+Kasilof,7/19/2024,495532,2018,AgeAllocation
+Kenai,7/19/2024,760225,2019,AgeAllocation
+Kasilof,7/19/2024,423917,2019,AgeAllocation
+Kasilof,7/19/2024,583649,2021,Age Allocation
+Kenai,7/19/2024,446158,2021,Age Allocation
+Kasilof,7/19/2024,859421,2022,Age Allocation
+Kenai,7/19/2024,769320,2022,Age Allocation
+Kasilof,7/20/2024,195225.3115,2016,GeneticReconstruction
+Kenai,7/20/2024,1682865.631,2016,GeneticReconstruction
+Kasilof,7/20/2024,870177.7751,2015,GeneticReconstruction
+Kenai,7/20/2024,2759916.478,2015,GeneticReconstruction
+Kenai,7/20/2024,1037836,2017,AgeAllocation
+Kasilof,7/20/2024,712014,2017,AgeAllocation
+Kenai,7/20/2024,552485,2018,AgeAllocation
+Kasilof,7/20/2024,521099,2018,AgeAllocation
+Kenai,7/20/2024,802019,2019,AgeAllocation
+Kasilof,7/20/2024,426733,2019,AgeAllocation
+Kasilof,7/20/2024,522262,2020,Age Allocation
+Kenai,7/20/2024,705958,2020,Age Allocation
+Kasilof,7/20/2024,665537,2021,Age Allocation
+Kenai,7/20/2024,611967,2021,Age Allocation
+Kasilof,7/20/2024,1030964,2022,Age Allocation
+Kenai,7/20/2024,1145240,2022,Age Allocation
+Kasilof,7/21/2024,215535.7919,2016,GeneticReconstruction
+Kenai,7/21/2024,1882565.248,2016,GeneticReconstruction
+Kasilof,7/21/2024,898820.8278,2015,GeneticReconstruction
+Kenai,7/21/2024,2873362.127,2015,GeneticReconstruction
+Kenai,7/21/2024,679264,2018,AgeAllocation
+Kasilof,7/21/2024,517782,2018,AgeAllocation
+Kenai,7/21/2024,857254,2019,AgeAllocation
+Kasilof,7/21/2024,436198,2019,AgeAllocation
+Kasilof,7/21/2024,543684,2020,Age Allocation
+Kenai,7/21/2024,743519,2020,Age Allocation
+Kasilof,7/21/2024,1097931,2022,Age Allocation
+Kenai,7/21/2024,1414851,2022,Age Allocation
+Kasilof,7/22/2024,218270.0666,2016,GeneticReconstruction
+Kenai,7/22/2024,1974898.499,2016,GeneticReconstruction
+Kasilof,7/22/2024,928792.7478,2015,GeneticReconstruction
+Kenai,7/22/2024,2921831.936,2015,GeneticReconstruction
+Kenai,7/22/2024,982543,2019,AgeAllocation
+Kasilof,7/22/2024,436958,2019,AgeAllocation
+Kasilof,7/22/2024,667994,2021,Age Allocation
+Kenai,7/22/2024,922168,2021,Age Allocation
+Kasilof,7/22/2024,1126939,2022,Age Allocation
+Kenai,7/22/2024,1571454,2022,Age Allocation
+Kasilof,7/23/2024,262445.5085,2016,GeneticReconstruction
+Kenai,7/23/2024,2123986.204,2016,GeneticReconstruction
+Kasilof,7/23/2024,979783.6331,2015,GeneticReconstruction
+Kenai,7/23/2024,3006941.963,2015,GeneticReconstruction
+Kenai,7/23/2024,813093,2018,AgeAllocation
+Kasilof,7/23/2024,548398,2018,AgeAllocation
+Kenai,7/23/2024,1238190,2019,AgeAllocation
+Kasilof,7/23/2024,473089,2019,AgeAllocation
+Kasilof,7/23/2024,568505,2020,Age Allocation
+Kenai,7/23/2024,817723,2020,Age Allocation
+Kasilof,7/23/2024,700542,2021,Age Allocation
+Kenai,7/23/2024,1030473,2021,Age Allocation
+Kasilof,7/23/2024,1178502,2022,Age Allocation
+Kenai,7/23/2024,1697341,2022,Age Allocation
+Kasilof,7/24/2024,268517.3956,2016,GeneticReconstruction
+Kenai,7/24/2024,2185941.043,2016,GeneticReconstruction
+Kasilof,7/24/2024,1008617.2,2015,GeneticReconstruction
+Kenai,7/24/2024,3053388.306,2015,GeneticReconstruction
+Kenai,7/24/2024,860059,2018,AgeAllocation
+Kasilof,7/24/2024,543817,2018,AgeAllocation
+Kasilof,7/24/2024,578349,2020,Age Allocation
+Kenai,7/24/2024,862779,2020,Age Allocation
+Kasilof,7/24/2024,1198411,2022,Age Allocation
+Kenai,7/24/2024,1853753,2022,Age Allocation
+Kasilof,7/25/2024,287897.5407,2016,GeneticReconstruction
+Kenai,7/25/2024,2218841.646,2016,GeneticReconstruction
+Kasilof,7/25/2024,1055295.744,2015,GeneticReconstruction
+Kenai,7/25/2024,3100706.797,2015,GeneticReconstruction
+Kenai,7/25/2024,869620,2018,AgeAllocation
+Kasilof,7/25/2024,563256,2018,AgeAllocation
+Kenai,7/25/2024,1375194,2019,AgeAllocation
+Kasilof,7/25/2024,487555,2019,AgeAllocation
+Kasilof,7/25/2024,1234575,2022,Age Allocation
+Kenai,7/25/2024,1966182,2022,Age Allocation
+Kasilof,7/26/2024,317694.9246,2016,GeneticReconstruction
+Kenai,7/26/2024,2249049.477,2016,GeneticReconstruction
+Kasilof,7/26/2024,1103378.668,2015,GeneticReconstruction
+Kenai,7/26/2024,3139548.569,2015,GeneticReconstruction
+Kenai,7/26/2024,1525312,2017,AgeAllocation
+Kasilof,7/26/2024,662696,2017,AgeAllocation
+Kenai,7/26/2024,905072,2018,AgeAllocation
+Kasilof,7/26/2024,576717,2018,AgeAllocation
+Kenai,7/26/2024,1636324,2019,AgeAllocation
+Kasilof,7/26/2024,532689,2019,AgeAllocation
+Kasilof,7/26/2024,716493,2021,Age Allocation
+Kenai,7/26/2024,1243962,2021,Age Allocation
+Kasilof,7/26/2024,1258028,2022,Age Allocation
+Kenai,7/26/2024,2031119,2022,Age Allocation
+Kasilof,7/27/2024,320983.7565,2016,GeneticReconstruction
+Kenai,7/27/2024,2275237.73,2016,GeneticReconstruction
+Kasilof,7/27/2024,1133958.392,2015,GeneticReconstruction
+Kenai,7/27/2024,3189362.246,2015,GeneticReconstruction
+Kenai,7/27/2024,1652102,2017,AgeAllocation
+Kasilof,7/27/2024,660672,2017,AgeAllocation
+Kasilof,7/27/2024,599180,2020,Age Allocation
+Kenai,7/27/2024,961049,2020,Age Allocation
+Kasilof,7/27/2024,748018,2021,Age Allocation
+Kenai,7/27/2024,1475319,2021,Age Allocation
+Kasilof,7/27/2024,1290014,2022,Age Allocation
+Kenai,7/27/2024,2119034,2022,Age Allocation
+Kasilof,7/28/2024,373487.3014,2016,GeneticReconstruction
+Kenai,7/28/2024,2327361.224,2016,GeneticReconstruction
+Kasilof,7/28/2024,1150902.188,2015,GeneticReconstruction
+Kenai,7/28/2024,3224756.281,2015,GeneticReconstruction
+Kenai,7/28/2024,1763895,2017,AgeAllocation
+Kasilof,7/28/2024,672644,2017,AgeAllocation
+Kasilof,7/28/2024,641076,2020,Age Allocation
+Kenai,7/28/2024,1115846,2020,Age Allocation
+Kasilof,7/28/2024,752221,2021,Age Allocation
+Kenai,7/28/2024,1488678,2021,Age Allocation
+Kasilof,7/28/2024,1307820,2022,Age Allocation
+Kenai,7/28/2024,2177931,2022,Age Allocation
+Kasilof,7/29/2024,378886.5312,2016,GeneticReconstruction
+Kenai,7/29/2024,2350788.935,2016,GeneticReconstruction
+Kasilof,7/29/2024,1172500.762,2015,GeneticReconstruction
+Kenai,7/29/2024,3262506.281,2015,GeneticReconstruction
+Kenai,7/29/2024,1935108,2017,AgeAllocation
+Kasilof,7/29/2024,703853,2017,AgeAllocation
+Kenai,7/29/2024,963133,2018,AgeAllocation
+Kasilof,7/29/2024,596138,2018,AgeAllocation
+Kenai,7/29/2024,2170548,2019,AgeAllocation
+Kasilof,7/29/2024,571775,2019,AgeAllocation
+Kasilof,7/29/2024,1327249,2022,Age Allocation
+Kenai,7/29/2024,2253454,2022,Age Allocation
+Kasilof,7/30/2024,456161.36,2016,GeneticReconstruction
+Kenai,7/30/2024,2387023.874,2016,GeneticReconstruction
+Kasilof,7/30/2024,1189592.308,2015,GeneticReconstruction
+Kenai,7/30/2024,3298706.703,2015,GeneticReconstruction
+Kenai,7/30/2024,2400145,2019,AgeAllocation
+Kasilof,7/30/2024,595405,2019,AgeAllocation
+Kasilof,7/30/2024,652819,2020,Age Allocation
+Kenai,7/30/2024,1179163,2020,Age Allocation
+Kasilof,7/30/2024,771530,2021,Age Allocation
+Kenai,7/30/2024,1653115,2021,Age Allocation
+Kasilof,7/31/2024,461668.4204,2016,GeneticReconstruction
+Kenai,7/31/2024,2439957.609,2016,GeneticReconstruction
+Kasilof,7/31/2024,1205153.189,2015,GeneticReconstruction
+Kenai,7/31/2024,3336941.935,2015,GeneticReconstruction
+Kenai,7/31/2024,2053204,2017,AgeAllocation
+Kasilof,7/31/2024,720083,2017,AgeAllocation
+Kenai,7/31/2024,943448,2018,AgeAllocation
+Kasilof,7/31/2024,609599,2018,AgeAllocation
+Kenai,7/31/2024,2641237,2019,AgeAllocation
+Kasilof,7/31/2024,611547,2019,AgeAllocation
+Kasilof,7/31/2024,670371,2020,Age Allocation
+Kenai,7/31/2024,1252159,2020,Age Allocation
+Kasilof,7/31/2024,1343047,2022,Age Allocation
+Kenai,7/31/2024,2293760,2022,Age Allocation
+Kasilof,8/1/2024,504785.745,2016,GeneticReconstruction
+Kenai,8/1/2024,2495520.901,2016,GeneticReconstruction
+Kasilof,8/1/2024,1222712.898,2015,GeneticReconstruction
+Kenai,8/1/2024,3368237.845,2015,GeneticReconstruction
+Kenai,8/1/2024,2768559,2019,AgeAllocation
+Kasilof,8/1/2024,623517,2019,AgeAllocation
+Kasilof,8/1/2024,1366858,2022,Age Allocation
+Kenai,8/1/2024,2333277,2022,Age Allocation
+Kasilof,8/2/2024,533182.4439,2016,GeneticReconstruction
+Kenai,8/2/2024,2524717.103,2016,GeneticReconstruction
+Kasilof,8/2/2024,1232358.166,2015,GeneticReconstruction
+Kenai,8/2/2024,3389693.542,2015,GeneticReconstruction
+Kasilof,8/3/2024,553485.8321,2016,GeneticReconstruction
+Kenai,8/3/2024,2564331.027,2016,GeneticReconstruction
+Kasilof,8/3/2024,1248514.966,2015,GeneticReconstruction
+Kenai,8/3/2024,3424047.972,2015,GeneticReconstruction
+Kenai,8/3/2024,2177526,2017,AgeAllocation
+Kasilof,8/3/2024,747927,2017,AgeAllocation
+Kasilof,8/4/2024,596973.3108,2016,GeneticReconstruction
+Kenai,8/4/2024,2610802.546,2016,GeneticReconstruction
+Kasilof,8/4/2024,1254591.987,2015,GeneticReconstruction
+Kenai,8/4/2024,3468345.44,2015,GeneticReconstruction
+Kenai,8/4/2024,2988270,2019,AgeAllocation
+Kasilof,8/4/2024,641347,2019,AgeAllocation
+Kasilof,8/5/2024,615911.4204,2016,GeneticReconstruction
+Kenai,8/5/2024,2642872.166,2016,GeneticReconstruction
+Kasilof,8/5/2024,1278643.921,2015,GeneticReconstruction
+Kenai,8/5/2024,3492079.618,2015,GeneticReconstruction
+Kenai,8/5/2024,3086796,2019,AgeAllocation
+Kasilof,8/5/2024,651270,2019,AgeAllocation
+Kasilof,8/6/2024,656123.618,2016,GeneticReconstruction
+Kenai,8/6/2024,2667041.998,2016,GeneticReconstruction
+Kasilof,8/6/2024,1298117.654,2015,GeneticReconstruction
+Kenai,8/6/2024,3512225.187,2015,GeneticReconstruction
+Kenai,8/6/2024,3181295,2019,AgeAllocation
+Kasilof,8/6/2024,658148,2019,AgeAllocation
+Kasilof,8/6/2024,733535,2020,Age Allocation
+Kenai,8/6/2024,1569873,2020,Age Allocation
+Kasilof,8/6/2024,1438018,2022,Age Allocation
+Kenai,8/6/2024,2483839,2022,Age Allocation
+Kasilof,8/7/2024,682404.5466,2016,GeneticReconstruction
+Kenai,8/7/2024,2692615.837,2016,GeneticReconstruction
+Kasilof,8/7/2024,1303759.949,2015,GeneticReconstruction
+Kenai,8/7/2024,3537623.921,2015,GeneticReconstruction
+Kenai,8/7/2024,2368070,2017,AgeAllocation
+Kasilof,8/7/2024,789436,2017,AgeAllocation
+Kenai,8/7/2024,3255065,2019,AgeAllocation
+Kasilof,8/7/2024,663646,2019,AgeAllocation
+Kasilof,8/7/2024,1457112,2022,Age Allocation
+Kenai,8/7/2024,2508324,2022,Age Allocation
+Kasilof,8/8/2024,687056.6647,2016,GeneticReconstruction
+Kenai,8/8/2024,2718198.116,2016,GeneticReconstruction
+Kasilof,8/8/2024,1315288.413,2015,GeneticReconstruction
+Kenai,8/8/2024,3566009.997,2015,GeneticReconstruction
+Kenai,8/8/2024,1162349,2018,AgeAllocation
+Kasilof,8/8/2024,792619,2018,AgeAllocation
+Kenai,8/8/2024,3317800,2019,AgeAllocation
+Kasilof,8/8/2024,662569,2019,AgeAllocation
+Kasilof,8/8/2024,1464968,2022,Age Allocation
+Kenai,8/8/2024,2531772,2022,Age Allocation
+Kasilof,8/9/2024,725510.457,2016,GeneticReconstruction
+Kenai,8/9/2024,2744101.069,2016,GeneticReconstruction
+Kasilof,8/9/2024,1322898.453,2015,GeneticReconstruction
+Kenai,8/9/2024,3590256.833,2015,GeneticReconstruction
+Kenai,8/9/2024,3020680,2021,Age Allocation
+Kasilof,8/10/2024,739082.8326,2016,GeneticReconstruction
+Kenai,8/10/2024,2769654.867,2016,GeneticReconstruction
+Kasilof,8/10/2024,1330486.056,2015,GeneticReconstruction
+Kenai,8/10/2024,3604377.086,2015,GeneticReconstruction
+Kenai,8/10/2024,2487481,2017,AgeAllocation
+Kasilof,8/10/2024,811257,2017,AgeAllocation
+Kenai,8/10/2024,3114840,2021,Age Allocation
+Kasilof,8/10/2024,1487707,2022,Age Allocation
+Kenai,8/10/2024,2583545,2022,Age Allocation
+Kasilof,8/11/2024,758546.7144,2016,GeneticReconstruction
+Kenai,8/11/2024,2795040.943,2016,GeneticReconstruction
+Kasilof,8/11/2024,1336762.412,2015,GeneticReconstruction
+Kenai,8/11/2024,3174103,2021,Age Allocation
+Kasilof,8/12/2024,770518.709,2016,GeneticReconstruction
+Kenai,8/12/2024,2821476.597,2016,GeneticReconstruction
+Kasilof,8/12/2024,1342098.227,2015,GeneticReconstruction
+Kasilof,8/13/2024,774985.9747,2016,GeneticReconstruction
+Kenai,8/13/2024,2849525.12,2016,GeneticReconstruction
+Kasilof,8/13/2024,1345342.76,2015,GeneticReconstruction
+Kenai,8/13/2024,2527428,2017,AgeAllocation
+Kasilof,8/13/2024,819354,2017,AgeAllocation
+Kasilof,8/13/2024,775397,2020,Age Allocation
+Kenai,8/13/2024,1803044,2020,Age Allocation
+Kasilof,8/14/2024,778111.777,2016,GeneticReconstruction
+Kenai,8/14/2024,2876511.407,2016,GeneticReconstruction
+Kasilof,8/14/2024,1348757.295,2015,GeneticReconstruction
+Kenai,8/14/2024,2625505,2017,AgeAllocation
+Kasilof,8/14/2024,817842,2017,AgeAllocation
+Kasilof,8/15/2024,782001.3791,2016,GeneticReconstruction
+Kasilof,8/16/2024,785885.8463,2016,GeneticReconstruction
+Kasilof,8/17/2024,790336.424,2016,GeneticReconstruction
+Kasilof,8/18/2024,794046.3085,2016,GeneticReconstruction
+Kenai,8/18/2024,1336943,2018,AgeAllocation
+Kasilof,8/18/2024,798812,2018,AgeAllocation
+Kasilof,8/19/2024,800939.7616,2016,GeneticReconstruction
+Kasilof,8/20/2024,807093.8053,2016,GeneticReconstruction
+Kasilof,8/21/2024,811778.0158,2016,GeneticReconstruction
+Kasilof,8/22/2024,817994.9606,2016,GeneticReconstruction
+Kasilof,8/23/2024,822062.9965,2016,GeneticReconstruction
+Kasilof,8/24/2024,825815.243,2016,GeneticReconstruction
+Kasilof,8/24/2024,864133,2021,Age Allocation
+Kenai,8/24/2024,3801416,2021,Age Allocation
+Kasilof,8/25/2024,827292.7783,2016,GeneticReconstruction
+Kasilof,8/26/2024,830498.1698,2016,GeneticReconstruction
+Kasilof,8/27/2024,832491.005,2016,GeneticReconstruction
+Kasilof,8/28/2024,836508.4052,2016,GeneticReconstruction
+Kasilof,8/29/2024,839129.6949,2016,GeneticReconstruction
+Kasilof,8/30/2024,842011.9876,2016,GeneticReconstruction
+Kasilof,8/31/2024,843735.6314,2016,GeneticReconstruction
+Kasilof,9/1/2024,845270.9436,2016,GeneticReconstruction
+Kasilof,9/2/2024,846861.527,2016,GeneticReconstruction
